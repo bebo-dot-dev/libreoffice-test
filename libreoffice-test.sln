@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libreoffice-test", "libreoffice-test.csproj", "{BAEBDB58-6A67-4150-9EFE-D55BB6F2AAEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BAEBDB58-6A67-4150-9EFE-D55BB6F2AAEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAEBDB58-6A67-4150-9EFE-D55BB6F2AAEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAEBDB58-6A67-4150-9EFE-D55BB6F2AAEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAEBDB58-6A67-4150-9EFE-D55BB6F2AAEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
