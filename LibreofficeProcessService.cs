@@ -120,14 +120,23 @@ public class LibreofficeProcessService : ILibreofficeProcessService, IHostedServ
                         ["TMPDIR"] = "/tmp"
                     }
                 };
-            
-                var result = await AsyncProcess.RunAsync(startInfo);
-                if (result.ExitCode != 0)
+
+                AsyncProcess.AsyncProcessResult? processResult = null;
+                try
+                {
+                    processResult = await AsyncProcess.RunAsync(startInfo);
+                }
+                finally
+                {
+                    processResult?.Process?.Dispose();
+                }
+                
+                if (processResult.ExitCode != 0)
                 {
                     File.Delete(source);
                     var retries = retryCount + 1;
                     await Task.Delay(100);
-                    await ((ILibreofficeProcessService)this).ConvertFile(retries, result.StdErr);
+                    await ((ILibreofficeProcessService)this).ConvertFile(retries, processResult.StdErr);
                 }
                 else
                 {

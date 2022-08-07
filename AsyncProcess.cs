@@ -19,10 +19,10 @@ public static class AsyncProcess
     /// </summary>
     /// <param name="startInfo">ProcessStartInfo object</param>
     /// <param name="timeoutMs">The timeout in milliseconds (null for no timeout)</param>
-    /// <returns>Result object</returns>
-    public static async Task<Result> RunAsync(ProcessStartInfo startInfo, int? timeoutMs = null)
+    /// <returns>AsyncProcessResult</returns>
+    public static async Task<AsyncProcessResult> RunAsync(ProcessStartInfo startInfo, int? timeoutMs = null)
     {
-        var result = new Result();
+        var result = new AsyncProcessResult();
 
         var process = new Process { StartInfo = startInfo, EnableRaisingEvents = true };
         // List of tasks to wait for a whole process exit
@@ -134,9 +134,9 @@ public static class AsyncProcess
     }
 
     /// <summary>
-    /// Run process result
+    /// AsyncProcessResult
     /// </summary>
-    public class Result
+    public class AsyncProcessResult
     {
         /// <summary>
         /// Exit code
