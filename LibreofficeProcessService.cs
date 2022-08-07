@@ -41,7 +41,7 @@ public class LibreofficeProcessService : ILibreofficeProcessService, IHostedServ
         }
     }
     
-    private async Task EnsureLibreoffice(bool forceInit)
+    private async Task EnsureLibreoffice(bool forceInit = false)
     {
         await SemaphoreSlim.WaitAsync();
         try
@@ -62,9 +62,30 @@ public class LibreofficeProcessService : ILibreofficeProcessService, IHostedServ
                         ["TMPDIR"] = "/tmp"
                     }
                 };
-        
-                var result = await AsyncProcess.RunAsync(startInfo, 1000);
-                _unoserverProcess = result.Process;    
+                
+                var unoserverProcess = new Process { StartInfo = startInfo, EnableRaisingEvents = true };
+                unoserverProcess.OutputDataReceived += (_, e) =>
+                {
+                    _logger.LogInformation(e.Data);
+                };
+                unoserverProcess.ErrorDataReceived += (_, e) =>
+                {
+                    _logger.LogInformation(e.Data);
+                };
+                
+                // start the long running Libreoffice unoserver process
+                if (!unoserverProcess.Start())
+                {
+                    _logger.LogError("Failed to start {unoserver} with exitCode {exitCode}", 
+                        _unoserver,
+                        unoserverProcess.ExitCode);
+                }
+                else
+                {
+                    unoserverProcess.BeginOutputReadLine();
+                    unoserverProcess.BeginErrorReadLine();
+                    _unoserverProcess = unoserverProcess;
+                }
             }
         }
         finally
@@ -126,7 +147,7 @@ public class LibreofficeProcessService : ILibreofficeProcessService, IHostedServ
     async Task IHostedService.StartAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("StartAsync");
-        await EnsureLibreoffice(false);
+        await EnsureLibreoffice();
     }
 
     Task IHostedService.StopAsync(CancellationToken cancellationToken)
